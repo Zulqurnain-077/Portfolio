@@ -6,7 +6,7 @@ const PORTFOLIO_DATA = {
     education:
       "> BS Computer Science (2022-2026) | Minhaj University Lahore.<br>> FSc Pre-Medical (2019-2021) | Govt. Graduate College for Boys, Model Town.<br>> Matric (2017-2019) | Ch Rehmat Ali Memorial Trust.",
     projects:
-      "> 1. AI WORKOUT TRAINER: Built CV system with OpenPose. Replaced VGG-19 with MobileNet to boost FPS from 5 to 12. Improved form accuracy to 95%.<br>> 2. CROP DETECTION: Engineered a hybrid CNN using EfficientNetV2L with custom attention mechanisms.<br>> 3. HOTEL MANAGEMENT: Console-based C++ OOP system with billing and file handling.",
+      "> 1. AI WORKOUT TRAINER: Built CV system with OpenPose. Replaced VGG-19 with MobileNet to boost FPS. Improved accuracy to 95%.<br>> 2. CROP DETECTION: Engineered a hybrid CNN using EfficientNetV2L.<br>> 3. HOTEL MANAGEMENT: Console-based C++ OOP system.<br>> 4. INTERACTIVE PORTFOLIO: Engineered a high-performance SPA featuring a custom dynamic terminal chatbot, CI/CD pipeline, and anti-bot security.",
     business:
       "> No commercial business inquiries logged. Type 'experience' to view my corporate audit background.",
     experience:
@@ -49,6 +49,17 @@ const PORTFOLIO_DATA = {
         "Implemented complex features including room booking, customer management, and billing.",
         "Utilized core OOP concepts such as classes, inheritance, and polymorphism.",
         "Enhanced file handling techniques for secure data storage and rapid retrieval.",
+      ],
+    },
+    portfoliobot: {
+      title: "Interactive Portfolio & CLI Bot",
+      tags: ["HTML5 / CSS3", "Vanilla JS", "CI/CD / Vercel"],
+      desc: "Engineered a high-performance, responsive single-page application featuring a custom terminal chatbot and an automated cloud deployment pipeline.",
+      features: [
+        "Developed a fully responsive SPA from scratch using pure HTML, CSS, and Vanilla JavaScript, ensuring zero-latency load times without bloated frameworks.",
+        "Built a custom CLI simulation that dynamically parses a headless data configuration file to deliver context-aware responses.",
+        "Architected a CI/CD pipeline integrating VS Code, GitHub, and Vercel for automated, zero-downtime live production updates.",
+        "Implemented 3D tilt-responsive UI elements, dynamic DOM manipulation, and a secure contact system with strict Regex and invisible honeypot anti-bot mechanisms.",
       ],
     },
   },
