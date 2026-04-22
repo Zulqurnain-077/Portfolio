@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // --- 1. Scroll Reveal ---
   const observerOptions = { root: null, rootMargin: "0px", threshold: 0.15 };
   const observer = new IntersectionObserver((entries, observer) => {
     entries.forEach((entry) => {
@@ -11,7 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }, observerOptions);
   document.querySelectorAll(".fade-in").forEach((el) => observer.observe(el));
 
-  // --- 2. 3D Portrait ---
   const wrapper = document.querySelector(".portrait-wrapper");
   const portrait = document.querySelector(".interactive-portrait");
 
@@ -33,7 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // --- 3. Modals (Dynamic Data) ---
   const modalOverlay = document.getElementById("project-modal");
   const closeBtn = document.querySelector(".close-modal");
 
@@ -61,7 +58,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // --- 4. TERMINAL CHATBOT (Autopilot Upgraded) ---
   const terminalWindow = document.getElementById("terminal-window");
   const chatbotToggle = document.getElementById("chatbot-toggle");
   const closeTerminal = document.getElementById("close-terminal");
@@ -110,7 +106,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       let response;
 
-      // AUTOPILOT HELP MENU: Dynamically reads your data.js file
       if (query === "help") {
         const availableCommands = Object.keys(PORTFOLIO_DATA.chatbot);
         response =
@@ -143,29 +138,23 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // --- 5. SECURE FORM HIJACK (Honeypot + Regex) ---
   const gForm = document.getElementById("gform");
   const emailInput = document.getElementById("email-input");
   const formMsg = document.getElementById("form-msg");
   const submitBtn = document.getElementById("submit-btn");
-  const honeypot = document.getElementById("bot-trap"); // The hidden trap
+  const honeypot = document.getElementById("bot-trap");
   let isSubmitting = false;
 
   if (gForm && emailInput && formMsg && submitBtn) {
     gForm.addEventListener("submit", (e) => {
-      // 1. SILENT BOT ASSASSINATION
-      // If the invisible field has text, a bot filled it out.
       if (honeypot && honeypot.value !== "") {
-        e.preventDefault(); // Stop the form from sending
-        gForm.reset(); // Clear the form
-        // Give a fake success message so the bot thinks it won and moves on
+        e.preventDefault();
+        gForm.reset();
         formMsg.textContent = "TRANSMISSION SUCCESSFUL.";
         formMsg.className = "form-msg msg-success";
         return;
       }
 
-      // 2. STRICT REGEX VALIDATION FOR GMAIL
-      // This ensures they didn't just type "a@gmail.com". It forces standard Gmail formatting.
       const emailVal = emailInput.value.trim().toLowerCase();
       const strictGmailRegex = /^[a-z0-9](\.?[a-z0-9]){4,}@gmail\.com$/;
 
@@ -178,7 +167,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // 3. PREVENT DOUBLE SUBMISSIONS
       if (isSubmitting) {
         e.preventDefault();
         return;
@@ -189,7 +177,6 @@ document.addEventListener("DOMContentLoaded", () => {
       formMsg.textContent = "";
       emailInput.style.borderColor = "#333";
 
-      // 4. PROCESS THE SUBMISSION
       setTimeout(() => {
         gForm.reset();
         submitBtn.textContent = "Transmit Message";

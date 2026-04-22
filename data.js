@@ -1,8 +1,5 @@
 // data.js
-// UPDATE THIS FILE WHENEVER YOUR CV OR PROJECTS CHANGE. THE WEBSITE WILL ADAPT AUTOMATICALLY.
-
 const PORTFOLIO_DATA = {
-  // --- CHATBOT KNOWLEDGE BASE ---
   chatbot: {
     skills:
       "> CORE: Problem Solving, System Analysis, Software Engineering.<br>> STACK: C++, Python, MongoDB, Web Technologies.<br>> SPECIALTIES: Artificial Intelligence, Computer Vision, Cross-functional Collaboration.",
@@ -21,8 +18,6 @@ const PORTFOLIO_DATA = {
     contact:
       "> Scroll to the footer and use the form. Valid @gmail.com addresses only.",
   },
-
-  // --- CASE STUDY MODALS DATA ---
   modals: {
     workouttrainer: {
       title: "AI Personal Workout Trainer",
