@@ -33,18 +33,26 @@
   </head>
   <body>
     <nav>
-      <div class="logo-group">
+      <a
+        href="#"
+        onclick="
+          window.location.reload();
+          return false;
+        "
+        class="logo-group"
+      >
         <img
           src="your-portrait.png"
           alt="Muhammad Zulqurnain Profile"
           class="nav-thumb"
         />
         <div class="logo">ZULQURNAIN©</div>
-      </div>
+      </a>
       <div class="nav-links">
         <a href="#skills">Strengths</a>
         <a href="#work">Projects</a>
-        <a href="#career">Experience</a>
+        <a href="#experience">Experience</a>
+        <a href="#education">Education</a>
         <a href="Muhammad_Zulqurnain_Cv.pdf" target="_blank" class="btn-outline"
           >↗ View CV</a
         >
@@ -169,14 +177,20 @@
       </div>
     </section>
 
-    <section id="career" class="fade-in">
-      <h2 class="section-title">/ Experience & Education</h2>
+    <section id="experience" class="fade-in">
+      <h2 class="section-title">/ Experience</h2>
       <div class="timeline">
         <div class="timeline-row">
           <div class="role">Senior Auditor</div>
           <div class="company">Check-In Auditors</div>
           <div class="year">06/2024 – Present</div>
         </div>
+      </div>
+    </section>
+
+    <section id="education" class="fade-in">
+      <h2 class="section-title">/ Education</h2>
+      <div class="timeline">
         <div class="timeline-row">
           <div class="role">BS Computer Science</div>
           <div class="company">Minhaj University Lahore</div>

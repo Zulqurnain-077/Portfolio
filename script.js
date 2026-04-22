@@ -1,5 +1,9 @@
+if (history.scrollRestoration) {
+  history.scrollRestoration = "manual";
+}
+window.scrollTo(0, 0);
+
 document.addEventListener("DOMContentLoaded", () => {
-  // --- 1. Scroll Reveal ---
   const observerOptions = { root: null, rootMargin: "0px", threshold: 0.15 };
   const observer = new IntersectionObserver((entries, observer) => {
     entries.forEach((entry) => {
@@ -11,7 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }, observerOptions);
   document.querySelectorAll(".fade-in").forEach((el) => observer.observe(el));
 
-  // --- 2. 3D Portrait ---
   const wrapper = document.querySelector(".portrait-wrapper");
   const portrait = document.querySelector(".interactive-portrait");
 
@@ -33,15 +36,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // --- 3. Modals (Scroll Bleed Fixed) ---
   const modalOverlay = document.getElementById("project-modal");
   const closeBtn = document.querySelector(".close-modal");
 
   if (modalOverlay && closeBtn) {
-    // Function to close modal and unlock background scrolling
     const closeModal = () => {
       modalOverlay.classList.add("hidden");
-      document.body.style.overflow = ""; // Unlocks the background
+      document.body.style.overflow = "";
     };
 
     document.querySelectorAll(".modal-trigger").forEach((btn) => {
@@ -57,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("modal-features").innerHTML = listHtml;
 
         modalOverlay.classList.remove("hidden");
-        document.body.style.overflow = "hidden"; // Locks the background
+        document.body.style.overflow = "hidden";
       });
     });
 
@@ -67,7 +68,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // --- 4. TERMINAL CHATBOT ---
   const terminalWindow = document.getElementById("terminal-window");
   const chatbotToggle = document.getElementById("chatbot-toggle");
   const closeTerminal = document.getElementById("close-terminal");
@@ -148,7 +148,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // --- 5. SECURE FORM HIJACK (Email API + Honeypot + Regex) ---
   const gForm = document.getElementById("gform");
   const emailInput = document.getElementById("email-input");
   const formMsg = document.getElementById("form-msg");
