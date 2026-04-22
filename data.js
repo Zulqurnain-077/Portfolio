@@ -1,4 +1,3 @@
-// data.js
 const PORTFOLIO_DATA = {
   chatbot: {
     skills:

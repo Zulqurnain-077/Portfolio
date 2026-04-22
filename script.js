@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // --- 1. Scroll Reveal ---
   const observerOptions = { root: null, rootMargin: "0px", threshold: 0.15 };
   const observer = new IntersectionObserver((entries, observer) => {
     entries.forEach((entry) => {
@@ -10,6 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }, observerOptions);
   document.querySelectorAll(".fade-in").forEach((el) => observer.observe(el));
 
+  // --- 2. 3D Portrait ---
   const wrapper = document.querySelector(".portrait-wrapper");
   const portrait = document.querySelector(".interactive-portrait");
 
@@ -31,10 +33,17 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // --- 3. Modals (Scroll Bleed Fixed) ---
   const modalOverlay = document.getElementById("project-modal");
   const closeBtn = document.querySelector(".close-modal");
 
   if (modalOverlay && closeBtn) {
+    // Function to close modal and unlock background scrolling
+    const closeModal = () => {
+      modalOverlay.classList.add("hidden");
+      document.body.style.overflow = ""; // Unlocks the background
+    };
+
     document.querySelectorAll(".modal-trigger").forEach((btn) => {
       btn.addEventListener("click", () => {
         const data = PORTFOLIO_DATA.modals[btn.dataset.project];
@@ -46,18 +55,19 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("modal-tags").innerHTML = tagsHtml;
         const listHtml = data.features.map((f) => `<li>${f}</li>`).join("");
         document.getElementById("modal-features").innerHTML = listHtml;
+
         modalOverlay.classList.remove("hidden");
+        document.body.style.overflow = "hidden"; // Locks the background
       });
     });
 
-    closeBtn.addEventListener("click", () =>
-      modalOverlay.classList.add("hidden"),
-    );
+    closeBtn.addEventListener("click", closeModal);
     modalOverlay.addEventListener("click", (e) => {
-      if (e.target === modalOverlay) modalOverlay.classList.add("hidden");
+      if (e.target === modalOverlay) closeModal();
     });
   }
 
+  // --- 4. TERMINAL CHATBOT ---
   const terminalWindow = document.getElementById("terminal-window");
   const chatbotToggle = document.getElementById("chatbot-toggle");
   const closeTerminal = document.getElementById("close-terminal");
@@ -138,6 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // --- 5. SECURE FORM HIJACK (Email API + Honeypot + Regex) ---
   const gForm = document.getElementById("gform");
   const emailInput = document.getElementById("email-input");
   const formMsg = document.getElementById("form-msg");
@@ -147,8 +158,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (gForm && emailInput && formMsg && submitBtn) {
     gForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+
       if (honeypot && honeypot.value !== "") {
-        e.preventDefault();
         gForm.reset();
         formMsg.textContent = "TRANSMISSION SUCCESSFUL.";
         formMsg.className = "form-msg msg-success";
@@ -159,31 +171,48 @@ document.addEventListener("DOMContentLoaded", () => {
       const strictGmailRegex = /^[a-z0-9](\.?[a-z0-9]){4,}@gmail\.com$/;
 
       if (!strictGmailRegex.test(emailVal)) {
-        e.preventDefault();
         formMsg.textContent =
-          "ACCESS DENIED: Enter a valid, correctly formatted @gmail.com address.";
+          "ACCESS DENIED: Enter a valid @gmail.com address.";
         formMsg.className = "form-msg msg-error";
         emailInput.style.borderColor = "#e74c3c";
         return;
       }
 
-      if (isSubmitting) {
-        e.preventDefault();
-        return;
-      }
+      if (isSubmitting) return;
 
       isSubmitting = true;
       submitBtn.textContent = "Transmitting...";
       formMsg.textContent = "";
       emailInput.style.borderColor = "#333";
 
-      setTimeout(() => {
-        gForm.reset();
-        submitBtn.textContent = "Transmit Message";
-        formMsg.textContent = "TRANSMISSION SUCCESSFUL. I WILL BE IN TOUCH.";
-        formMsg.className = "form-msg msg-success";
-        isSubmitting = false;
-      }, 1500);
+      const formData = new FormData(gForm);
+
+      fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData,
+      })
+        .then(async (response) => {
+          let json = await response.json();
+          if (response.status == 200) {
+            gForm.reset();
+            submitBtn.textContent = "Transmit Message";
+            formMsg.textContent =
+              "TRANSMISSION SUCCESSFUL. I WILL BE IN TOUCH.";
+            formMsg.className = "form-msg msg-success";
+          } else {
+            submitBtn.textContent = "Transmit Message";
+            formMsg.textContent = "SYSTEM ERROR. TRY AGAIN.";
+            formMsg.className = "form-msg msg-error";
+          }
+        })
+        .catch((error) => {
+          submitBtn.textContent = "Transmit Message";
+          formMsg.textContent = "NETWORK FAILURE. TRY AGAIN.";
+          formMsg.className = "form-msg msg-error";
+        })
+        .finally(() => {
+          isSubmitting = false;
+        });
     });
   }
 });

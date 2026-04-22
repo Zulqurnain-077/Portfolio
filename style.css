@@ -535,7 +535,6 @@ footer {
   outline: none;
 }
 
-/* Tablet Optimization */
 @media (max-width: 992px) {
   .nav-links a:not(.btn-outline) {
     display: none;
@@ -576,7 +575,6 @@ footer {
   }
 }
 
-/* Strict Phone Optimization */
 @media (max-width: 768px) {
   section {
     padding: 4rem 5%;
