@@ -16,7 +16,6 @@ const PORTFOLIO_DATA = {
       "> Muhammad Zulqurnain. Computer Science Senior and Auditor.<br>> Ambitious developer equipped with comprehensive knowledge in programming and AI.",
     contact:
       "> Scroll to the footer and use the form. Valid @gmail.com addresses only.",
-    nigga: "> hello niggga",
   },
   modals: {
     workouttrainer: {
