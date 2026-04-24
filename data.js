@@ -9,11 +9,11 @@ const PORTFOLIO_DATA = {
     business:
       "> No commercial business inquiries logged. Type 'experience' to view my corporate audit background.",
     experience:
-      "> Senior Auditor at Check-In Auditors (June 2024 - Present).<br>> I conduct financial audits, identify data entry discrepancies, and engineer process improvements.",
+      "> Freelance Auditor / Independent Consultant (Remote) (June 2024 - Present).<br>> I conduct financial audits, identify data entry discrepancies, and engineer process improvements.",
     achievements:
       "> Designed and deployed dual-impact solutions: a robust Hotel Administration system and the AI fitness trainer, streamlining complex operations.",
     whoami:
-      "> Muhammad Zulqurnain. Computer Science Senior and Auditor.<br>> Ambitious developer equipped with comprehensive knowledge in programming and AI.",
+      "> Muhammad Zulqurnain. Computer Science Senior and Software Engineer.<br>> Ambitious developer equipped with comprehensive knowledge in programming and AI.",
     contact:
       "> Scroll to the footer and use the form. Valid @gmail.com addresses only.",
   },
