@@ -863,16 +863,33 @@ footer {
 }
 
 /* ULTRA TINY VIEWPORTS (iPhone SE & Folded Devices) */
+/* ULTRA TINY VIEWPORTS (iPhone SE & Folded Devices) */
 @media (max-width: 360px) {
+  nav {
+    padding: 1rem 2%; /* Drop padding to absolute minimum for maximum screen runway */
+    gap: 6px;
+  }
+  .logo-group {
+    gap: 6px; /* Bring portrait and text closer together */
+  }
+  .nav-thumb {
+    width: 28px; /* Scale down your portrait slightly to save horizontal pixels */
+    height: 28px;
+  }
   .logo {
-    display: none;
-  } /* Drop branding layout if screens approach sub-350px width constraints */
+    font-size: 0.8rem; /* Shrink logo text slightly */
+  }
   .theme-switcher {
     padding: 4px 6px;
+    gap: 4px;
   }
   .theme-dot {
     width: 10px;
     height: 10px;
+  }
+  .btn-outline {
+    padding: 5px 8px; /* Slim down the CV button boundaries tightly */
+    font-size: 0.75rem; /* Make text slightly smaller so it stays inside the lines */
   }
   .project-showcase {
     padding: 1.5rem 1rem;
