@@ -863,33 +863,37 @@ footer {
 }
 
 /* ULTRA TINY VIEWPORTS (iPhone SE & Folded Devices) */
-/* ULTRA TINY VIEWPORTS (iPhone SE & Folded Devices) */
 @media (max-width: 360px) {
   nav {
-    padding: 1rem 2%; /* Drop padding to absolute minimum for maximum screen runway */
-    gap: 6px;
+    padding: 1rem 3% !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 8px !important;
   }
   .logo-group {
-    gap: 6px; /* Bring portrait and text closer together */
+    gap: 6px !important;
+    flex-shrink: 1 !important; /* Allows your logo/name to shrink to make room */
+    min-width: 0 !important; /* Breaks the default minimum width layout locks */
   }
   .nav-thumb {
-    width: 28px; /* Scale down your portrait slightly to save horizontal pixels */
-    height: 28px;
+    width: 24px !important; /* Safely drops portrait size */
+    height: 24px !important;
   }
   .logo {
-    font-size: 0.8rem; /* Shrink logo text slightly */
+    font-size: 0.75rem !important; /* Lowers text footprint */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Safely cuts off text with '...' if absolutely forced to */
   }
   .theme-switcher {
-    padding: 4px 6px;
-    gap: 4px;
-  }
-  .theme-dot {
-    width: 10px;
-    height: 10px;
+    display: none !important; /* Hides the dots ONLY on sub-360px displays to rescue the CV button */
   }
   .btn-outline {
-    padding: 5px 8px; /* Slim down the CV button boundaries tightly */
-    font-size: 0.75rem; /* Make text slightly smaller so it stays inside the lines */
+    padding: 6px 10px !important;
+    font-size: 0.75rem !important;
+    flex-shrink: 0 !important; /* STRATEGIC FORCE: Prevents this button from ever shrinking or cutting off */
+    white-space: nowrap !important;
   }
   .project-showcase {
     padding: 1.5rem 1rem;
