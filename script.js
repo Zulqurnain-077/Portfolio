@@ -469,10 +469,32 @@ document.addEventListener("DOMContentLoaded", () => {
   const mobileThemeBtn = document.getElementById("mobile-theme-toggle");
 
   if (mobileThemeBtn) {
+    const colors = ["#e74c3c", "#00ff00", "#00f0ff", "#ffffff"];
+
     mobileThemeBtn.addEventListener("click", (e) => {
       e.preventDefault();
       e.stopPropagation();
-      openPalette();
+
+      const currentAccent =
+        localStorage.getItem("portfolio-accent") || "#e74c3c";
+      let nextIndex = colors.indexOf(currentAccent) + 1;
+      if (nextIndex >= colors.length) nextIndex = 0;
+      const nextColor = colors[nextIndex];
+
+      document.documentElement.style.setProperty("--accent-color", nextColor);
+      localStorage.setItem("portfolio-accent", nextColor);
+
+      const targetDot = document.querySelector(
+        `.theme-dot[data-color="${nextColor}"]`,
+      );
+      if (targetDot) {
+        document
+          .querySelectorAll(".theme-dot")
+          .forEach((d) => d.classList.remove("active"));
+        targetDot.classList.add("active");
+      }
+
+      playMechanicalClick(false);
     });
 
     if (chatbotToggle) {
