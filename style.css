@@ -477,12 +477,19 @@ footer {
   box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
   transition:
     transform 0.3s,
-    background 0.3s;
+    background 0.3s,
+    color 0.3s;
   pointer-events: auto;
 }
 #chatbot-toggle:hover {
   transform: scale(1.1);
   filter: brightness(0.9);
+}
+
+/* SMART INVERSION: If the accent color is white, make the icon black so it stays visible */
+[style*="--accent-color: #ffffff"] #chatbot-toggle,
+[style*="--accent-color:#ffffff"] #chatbot-toggle {
+  color: #050505 !important;
 }
 #terminal-window {
   width: 400px;
