@@ -20,6 +20,7 @@ body {
   color: white;
 }
 
+/* NAV GLOBAL CONFIGURATION */
 nav {
   display: flex;
   justify-content: space-between;
@@ -40,6 +41,7 @@ nav {
   text-decoration: none;
   color: inherit;
   cursor: pointer;
+  flex-shrink: 0;
 }
 .nav-thumb {
   width: 36px;
@@ -79,6 +81,10 @@ nav {
   gap: 8px;
   align-items: center;
   margin-right: 5px;
+  background: #0a0a0a;
+  border: 1px solid #1a1a1a;
+  padding: 6px 10px;
+  border-radius: 20px;
 }
 .theme-dot {
   width: 14px;
@@ -107,19 +113,21 @@ nav {
   transition:
     background 0.3s,
     border-color 0.3s;
+  flex-shrink: 0;
 }
 .btn-outline:hover {
   background: #1a1a1a;
   border-color: var(--accent-color);
 }
 
+/* SECTIONS STRUCTURE */
 #hero {
   min-height: 100vh;
   display: flex;
   align-items: center;
   padding: 0 5%;
   border-bottom: 1px solid #1a1a1a;
-  padding-top: 80px;
+  padding-top: 100px;
 }
 .hero-grid {
   display: grid;
@@ -136,7 +144,7 @@ nav {
   font-size: 0.9rem;
 }
 .massive-text {
-  font-size: clamp(3.5rem, 8vw, 6.5rem);
+  font-size: clamp(2.8rem, 7vw, 6.5rem);
   font-weight: 800;
   line-height: 0.95;
   margin-bottom: 1.5rem;
@@ -153,6 +161,7 @@ nav {
   display: flex;
   justify-content: flex-end;
   position: relative;
+  width: 100%;
 }
 .portrait-wrapper {
   position: relative;
@@ -210,7 +219,7 @@ section {
 }
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 3rem;
 }
 .grid-item {
@@ -246,7 +255,7 @@ section {
   border-color: #444;
 }
 .project-info h3 {
-  font-size: 3rem;
+  font-size: clamp(1.8rem, 4vw, 3rem);
   margin-bottom: 1rem;
 }
 .btn-text {
@@ -296,6 +305,7 @@ section {
   color: #666;
 }
 
+/* FOOTER & FORMS */
 footer {
   padding: 8rem 5% 2rem 5%;
   display: flex;
@@ -381,6 +391,7 @@ footer {
   width: 100%;
 }
 
+/* CASE STUDY MODAL COMPONENTS */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -392,6 +403,7 @@ footer {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 20px;
   opacity: 1;
   transition: opacity 0.3s ease;
   backdrop-filter: blur(5px);
@@ -404,12 +416,14 @@ footer {
   background: #0a0a0a;
   border: 1px solid #333;
   padding: 3rem;
-  width: 90%;
+  width: 100%;
   max-width: 700px;
   border-radius: 8px;
   position: relative;
   transform: translateY(0);
   transition: transform 0.3s ease;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 .modal-overlay.hidden .modal-content {
   transform: translateY(20px);
@@ -424,6 +438,7 @@ footer {
   font-size: 1.5rem;
   cursor: pointer;
   transition: color 0.3s;
+  z-index: 10;
 }
 .close-modal:hover {
   color: #fff;
@@ -433,6 +448,7 @@ footer {
   gap: 10px;
   margin-top: 1rem;
   margin-bottom: 2rem;
+  flex-wrap: wrap;
 }
 .modal-tags span {
   background: #1a1a1a;
@@ -453,6 +469,7 @@ footer {
   margin-bottom: 0.5rem;
 }
 
+/* LIVE WINDOW CHATBOT CONFIG */
 .chatbot-wrapper {
   position: fixed;
   bottom: 30px;
@@ -484,12 +501,6 @@ footer {
 #chatbot-toggle:hover {
   transform: scale(1.1);
   filter: brightness(0.9);
-}
-
-/* SMART INVERSION: If the accent color is white, make the icon black so it stays visible */
-[style*="--accent-color: #ffffff"] #chatbot-toggle,
-[style*="--accent-color:#ffffff"] #chatbot-toggle {
-  color: #050505 !important;
 }
 #terminal-window {
   width: 400px;
@@ -576,112 +587,12 @@ footer {
   outline: none;
 }
 
-@media (max-width: 992px) {
-  .nav-links a:not(.btn-outline) {
-    display: none;
-  }
-  .theme-switcher {
-    display: none;
-  } /* Hide switcher on mobile layout for cleanliness */
-  .hero-grid {
-    grid-template-columns: 1fr;
-    text-align: center;
-    gap: 2rem;
-    padding-top: 3rem;
-  }
-  .hero-image-container {
-    justify-content: center;
-  }
-  .portrait-wrapper {
-    height: 50vh;
-    max-height: 450px;
-    max-width: 100%;
-  }
-  .timeline-row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-  .role,
-  .company,
-  .year {
-    width: 100%;
-    text-align: left;
-  }
-  .project-showcase {
-    padding: 2rem;
-  }
-  #terminal-window {
-    width: calc(100vw - 40px);
-    bottom: 90px;
-    right: 20px;
-    position: fixed;
-  }
+/* DYNAMIC CONTRAST ADJUSTMENT */
+[style*="--accent-color: #ffffff"] #chatbot-toggle,
+[style*="--accent-color:#ffffff"] #chatbot-toggle {
+  color: #050505 !important;
 }
 
-@media (max-width: 768px) {
-  section {
-    padding: 4rem 5%;
-  }
-  footer {
-    padding: 4rem 5% 2rem 5%;
-  }
-  .section-title {
-    margin-bottom: 2rem;
-    font-size: 1.2rem;
-  }
-  .massive-text {
-    font-size: clamp(2.5rem, 12vw, 3.5rem);
-    letter-spacing: -1px;
-  }
-  .project-info h3 {
-    font-size: 2rem;
-  }
-  .description {
-    font-size: 1rem;
-  }
-  .grid-container {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-  .form-group {
-    flex-direction: column;
-    gap: 1rem;
-  }
-  .btn-primary {
-    width: 100%;
-    text-align: center;
-  }
-  #chatbot-toggle {
-    width: 50px;
-    height: 50px;
-  }
-  .chatbot-wrapper {
-    bottom: 20px;
-    right: 20px;
-  }
-  #terminal-window {
-    width: calc(100vw - 40px);
-    height: 60vh;
-    max-height: 400px;
-    bottom: 80px;
-    right: 20px;
-  }
-  .modal-content {
-    padding: 2rem 1.5rem;
-    width: 95%;
-    max-height: 85vh;
-    overflow-y: auto;
-  }
-  .modal-tags {
-    flex-wrap: wrap;
-  }
-  .close-modal {
-    top: 1rem;
-    right: 1rem;
-    font-size: 1.2rem;
-  }
-}
 /* --- COMMAND PALETTE STYLING --- */
 .palette-overlay {
   position: fixed;
@@ -694,7 +605,7 @@ footer {
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding-top: 15vh;
+  padding: 15vh 20px 20px 20px;
   opacity: 1;
   transition: opacity 0.2s ease;
   backdrop-filter: blur(4px);
@@ -706,7 +617,7 @@ footer {
 .palette-box {
   background: #0a0a0a;
   border: 1px solid #333;
-  width: 90%;
+  width: 100%;
   max-width: 600px;
   border-radius: 8px;
   overflow: hidden;
@@ -736,6 +647,7 @@ footer {
   font-family: "JetBrains Mono", monospace;
   font-size: 1rem;
   outline: none;
+  width: 100%;
 }
 .palette-search-wrapper kbd {
   background: #222;
@@ -744,6 +656,7 @@ footer {
   padding: 2px 6px;
   font-size: 0.75rem;
   border-radius: 4px;
+  flex-shrink: 0;
 }
 .palette-results {
   max-height: 280px;
@@ -761,6 +674,7 @@ footer {
   transition:
     background 0.1s,
     color 0.1s;
+  gap: 15px;
 }
 .palette-item.selected {
   background: #111;
@@ -770,6 +684,8 @@ footer {
   color: #555;
   font-size: 0.8rem;
   text-transform: uppercase;
+  text-align: right;
+  white-space: nowrap;
 }
 .palette-item.selected .palette-shortcut {
   color: #888;
@@ -784,4 +700,184 @@ footer {
   color: #555;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   ULTRA-RESPONSIVE ARCHITECTURE BREAKPOINTS
+   ========================================================================== */
+
+/* TABLETS & LAPTOPS DOWN TO 992PX */
+@media (max-width: 992px) {
+  .nav-links a:not(.btn-outline) {
+    display: none;
+  }
+  .theme-switcher {
+    margin-right: 0;
+  } /* Keep theme switcher visible but neat */
+  .hero-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 3rem;
+    padding-top: 5rem;
+  }
+  .hero-image-container {
+    justify-content: center;
+  }
+  .portrait-wrapper {
+    height: 45vh;
+    max-height: 400px;
+    max-width: 380px;
+  }
+  .timeline-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .role,
+  .company,
+  .year {
+    width: 100%;
+    text-align: left;
+  }
+  .project-showcase {
+    padding: 3rem 2rem;
+  }
+  #terminal-window {
+    width: calc(100vw - 40px);
+    bottom: 90px;
+    right: 20px;
+    position: fixed;
+  }
+}
+
+/* SMARTPHONES AND SMALL MOBILE INTERFACES */
+@media (max-width: 768px) {
+  nav {
+    padding: 1rem 4%;
+  }
+  .logo {
+    font-size: 1rem;
+  }
+  .theme-switcher {
+    gap: 6px;
+    padding: 4px 8px;
+  }
+  .theme-dot {
+    width: 12px;
+    height: 12px;
+  }
+  .btn-outline {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+
+  section {
+    padding: 5rem 4%;
+  }
+  footer {
+    padding: 5rem 4% 2rem 4%;
+  }
+  .section-title {
+    margin-bottom: 2.5rem;
+    font-size: 1.1rem;
+  }
+  .massive-text {
+    font-size: clamp(2.2rem, 10vw, 3.5rem);
+    letter-spacing: -1px;
+  }
+  .description {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .portrait-wrapper {
+    max-width: 100%;
+    height: 380px;
+  }
+  .grid-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .form-group {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .btn-primary {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Mobile Chatbot Optimizations */
+  #chatbot-toggle {
+    width: 55px;
+    height: 55px;
+  }
+  .chatbot-wrapper {
+    bottom: 20px;
+    right: 20px;
+  }
+  #terminal-window {
+    width: calc(100vw - 40px);
+    height: 55vh;
+    max-height: 420px;
+    bottom: 75px;
+    right: 20px;
+  }
+
+  /* Mobile Case Study Modal Adjustments */
+  .modal-content {
+    padding: 2rem 1.5rem;
+    width: 100%;
+    max-height: 85vh;
+  }
+  .close-modal {
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.3rem;
+  }
+
+  /* Mobile Command Palette Optimizations */
+  .palette-overlay {
+    padding-top: 8vh;
+  }
+  .palette-search-wrapper {
+    padding: 12px 15px;
+  }
+  .palette-search-wrapper span {
+    font-size: 1rem;
+    margin-right: 10px;
+  }
+  #palette-search {
+    font-size: 0.9rem;
+  }
+  .palette-item {
+    padding: 10px 15px;
+    font-size: 0.8rem;
+  }
+  .palette-shortcut {
+    display: none;
+  } /* Hide keys on mobile touch devices for cleaner view */
+  .palette-footer {
+    display: none;
+  } /* Footers are redundant on virtual touch keypads */
+}
+
+/* ULTRA TINY VIEWPORTS (iPhone SE & Folded Devices) */
+@media (max-width: 360px) {
+  .logo {
+    display: none;
+  } /* Drop branding layout if screens approach sub-350px width constraints */
+  .theme-switcher {
+    padding: 4px 6px;
+  }
+  .theme-dot {
+    width: 10px;
+    height: 10px;
+  }
+  .project-showcase {
+    padding: 1.5rem 1rem;
+  }
+  .project-info h3 {
+    font-size: 1.5rem;
+  }
 }
