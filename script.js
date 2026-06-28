@@ -109,7 +109,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let selectedItemIndex = 0;
   let filteredCommands = [];
 
-  // Master command registry
   const commandsList = [
     {
       text: "Go to: Top / Intro",
@@ -218,7 +217,6 @@ document.addEventListener("DOMContentLoaded", () => {
       )
       .join("");
 
-    // Wire immediate item clicking
     document
       .querySelectorAll(".palette-results .palette-item")
       .forEach((el) => {
@@ -291,6 +289,14 @@ document.addEventListener("DOMContentLoaded", () => {
   palette.addEventListener("click", (e) => {
     if (e.target === palette) closePalette();
   });
+
+  // --- FLOATING MOBILE THEME TRIGGER ---
+  const mobileThemeBtn = document.getElementById("mobile-theme-toggle");
+  if (mobileThemeBtn) {
+    mobileThemeBtn.addEventListener("click", () => {
+      openPalette();
+    });
+  }
 
   // --- 1. Scroll Reveal ---
   const observerOptions = { root: null, rootMargin: "0px", threshold: 0.15 };

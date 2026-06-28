@@ -872,4 +872,36 @@ footer {
   .palette-footer {
     display: none;
   }
+
+  /* Show the floating theme toggle ONLY on mobile viewports */
+  .mobile-only-btn {
+    display: flex !important;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background: #111;
+    border: 1px solid #333;
+    color: var(--accent-color);
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-bottom: 15px; /* Stacks it directly above your chat icon */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    pointer-events: auto;
+    transition:
+      transform 0.2s,
+      color 0.2s;
+  }
+  .mobile-only-btn:active {
+    transform: scale(0.9);
+  }
+
+  /* Make sure the navbar dots stay completely hidden on mobile rows */
+  nav .theme-switcher {
+    display: none !important;
+  }
+}
+/* Hide the mobile floating button on desktop layouts by default */
+.mobile-only-btn {
+  display: none;
 }
