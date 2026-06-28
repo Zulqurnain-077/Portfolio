@@ -183,6 +183,7 @@ document.addEventListener("DOMContentLoaded", () => {
   ];
 
   const openPalette = () => {
+    if (!palette) return;
     palette.classList.remove("hidden");
     document.body.style.overflow = "hidden";
     paletteSearch.value = "";
@@ -193,6 +194,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const closePalette = () => {
+    if (!palette) return;
     palette.classList.add("hidden");
     if (!document.getElementById("project-modal").classList.contains("hidden"))
       return;
@@ -200,6 +202,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const renderResults = (items) => {
+    if (!paletteResults) return;
     filteredCommands = items;
     if (items.length === 0) {
       paletteResults.innerHTML = `<div class="palette-item" style="cursor:default;color:#555;">No commands match query...</div>`;
@@ -239,62 +242,62 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("keydown", (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
       e.preventDefault();
-      if (palette.classList.contains("hidden")) openPalette();
+      if (palette && palette.classList.contains("hidden")) openPalette();
       else closePalette();
     }
-    if (e.key === "Escape" && !palette.classList.contains("hidden")) {
+    if (
+      e.key === "Escape" &&
+      palette &&
+      !palette.classList.contains("hidden")
+    ) {
       closePalette();
     }
   });
 
-  paletteSearch.addEventListener("keydown", (e) => {
-    if (filteredCommands.length === 0) return;
+  if (paletteSearch) {
+    paletteSearch.addEventListener("keydown", (e) => {
+      if (filteredCommands.length === 0) return;
 
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      selectedItemIndex = (selectedItemIndex + 1) % filteredCommands.length;
-      renderResults(filteredCommands);
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        selectedItemIndex = (selectedItemIndex + 1) % filteredCommands.length;
+        renderResults(filteredCommands);
+        playMechanicalClick(false);
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        selectedItemIndex =
+          (selectedItemIndex - 1 + filteredCommands.length) %
+          filteredCommands.length;
+        renderResults(filteredCommands);
+        playMechanicalClick(false);
+      } else if (e.key === "Enter") {
+        e.preventDefault();
+        executeSelectedAction();
+      }
+    });
+
+    paletteSearch.addEventListener("input", () => {
       playMechanicalClick(false);
-    } else if (e.key === "ArrowUp") {
-      e.preventDefault();
-      selectedItemIndex =
-        (selectedItemIndex - 1 + filteredCommands.length) %
-        filteredCommands.length;
-      renderResults(filteredCommands);
-      playMechanicalClick(false);
-    } else if (e.key === "Enter") {
-      e.preventDefault();
-      executeSelectedAction();
-    }
-  });
+      const query = paletteSearch.value.toLowerCase().trim();
+      selectedItemIndex = 0;
 
-  paletteSearch.addEventListener("input", () => {
-    playMechanicalClick(false);
-    const query = paletteSearch.value.toLowerCase().trim();
-    selectedItemIndex = 0;
+      if (!query) {
+        renderResults(commandsList);
+        return;
+      }
 
-    if (!query) {
-      renderResults(commandsList);
-      return;
-    }
+      const filtered = commandsList.filter(
+        (item) =>
+          item.text.toLowerCase().includes(query) ||
+          item.shortcut.toLowerCase().includes(query),
+      );
+      renderResults(filtered);
+    });
+  }
 
-    const filtered = commandsList.filter(
-      (item) =>
-        item.text.toLowerCase().includes(query) ||
-        item.shortcut.toLowerCase().includes(query),
-    );
-    renderResults(filtered);
-  });
-
-  palette.addEventListener("click", (e) => {
-    if (e.target === palette) closePalette();
-  });
-
-  // --- FLOATING MOBILE THEME TRIGGER ---
-  const mobileThemeBtn = document.getElementById("mobile-theme-toggle");
-  if (mobileThemeBtn) {
-    mobileThemeBtn.addEventListener("click", () => {
-      openPalette();
+  if (palette) {
+    palette.addEventListener("click", (e) => {
+      if (e.target === palette) closePalette();
     });
   }
 
@@ -460,6 +463,33 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 300);
       }, 800);
     });
+  }
+
+  // --- FLOATING MOBILE THEME TRIGGER + VISIBILITY TOGGLE MATRIX ---
+  const mobileThemeBtn = document.getElementById("mobile-theme-toggle");
+
+  if (mobileThemeBtn) {
+    mobileThemeBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      openPalette();
+    });
+
+    if (chatbotToggle) {
+      chatbotToggle.addEventListener("click", () => {
+        if (terminalWindow && !terminalWindow.classList.contains("hidden")) {
+          mobileThemeBtn.classList.add("hidden-mobile-mode");
+        } else {
+          mobileThemeBtn.classList.remove("hidden-mobile-mode");
+        }
+      });
+    }
+
+    if (closeTerminal) {
+      closeTerminal.addEventListener("click", () => {
+        mobileThemeBtn.classList.remove("hidden-mobile-mode");
+      });
+    }
   }
 
   // --- 5. SECURE FORM HIJACK ---
