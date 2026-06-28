@@ -292,7 +292,26 @@
       <div id="terminal-window" class="hidden">
         <div class="terminal-header">
           <span>zulqurnain_ai@system:~$</span>
-          <button id="close-terminal">✕</button>
+          <div
+            class="terminal-controls"
+            style="display: flex; gap: 15px; align-items: center"
+          >
+            <button
+              id="audio-toggle"
+              style="
+                background: none;
+                border: none;
+                color: #888;
+                font-family: &quot;JetBrains Mono&quot;, monospace;
+                font-size: 0.75rem;
+                cursor: pointer;
+                transition: color 0.3s;
+              "
+            >
+              AUDIO: OFF
+            </button>
+            <button id="close-terminal">✕</button>
+          </div>
         </div>
         <div id="terminal-output"></div>
         <form id="terminal-form">

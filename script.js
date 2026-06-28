@@ -4,6 +4,85 @@ if (history.scrollRestoration) {
 window.scrollTo(0, 0);
 
 document.addEventListener("DOMContentLoaded", () => {
+  // --- AUDIO SYNTHESIZER ENGINE (Pure Code SFX) ---
+  let audioEnabled = false;
+  const audioToggleBtn = document.getElementById("audio-toggle");
+
+  // Synthesize a mechanical keyboard "clack" using low/high frequency noise bursts
+  const playMechanicalClick = (isEnterKey = false) => {
+    if (!audioEnabled) return;
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) return;
+      const ctx = new AudioContext();
+
+      // Generate raw noise buffer for key impact texture
+      const bufferSize = ctx.sampleRate * 0.04; // Very short burst (40ms)
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = Math.random() * 2 - 1;
+      }
+
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+
+      const noiseFilter = ctx.createBiquadFilter();
+      noiseFilter.type = "bandpass";
+      // Enter key has a deeper resonance cavity than regular letters
+      noiseFilter.frequency.setValueAtTime(
+        isEnterKey ? 600 : 1200,
+        ctx.currentTime,
+      );
+      noiseFilter.Q.setValueAtTime(3, ctx.currentTime);
+
+      const noiseGain = ctx.createGain();
+      noiseGain.gain.setValueAtTime(isEnterKey ? 0.15 : 0.08, ctx.currentTime);
+      noiseGain.gain.exponentialRampToValueAtTime(
+        0.001,
+        ctx.currentTime + 0.03,
+      );
+
+      // Synthesize the metallic switch pin vibration
+      const osc = ctx.createOscillator();
+      const oscGain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(isEnterKey ? 150 : 280, ctx.currentTime);
+
+      oscGain.gain.setValueAtTime(isEnterKey ? 0.1 : 0.04, ctx.currentTime);
+      oscGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.02);
+
+      // Connect nodes to audio destination
+      noise.connect(noiseFilter);
+      noiseFilter.connect(noiseGain);
+      noiseGain.connect(ctx.destination);
+
+      osc.connect(oscGain);
+      oscGain.connect(ctx.destination);
+
+      noise.start();
+      osc.start();
+      noise.stop(ctx.currentTime + 0.04);
+      osc.stop(ctx.currentTime + 0.04);
+    } catch (e) {
+      console.log("Audio synthesis blocked by browser security policy.");
+    }
+  };
+
+  if (audioToggleBtn) {
+    audioToggleBtn.addEventListener("click", () => {
+      audioEnabled = !audioEnabled;
+      if (audioEnabled) {
+        audioToggleBtn.textContent = "AUDIO: ON";
+        audioToggleBtn.style.color = "var(--accent-color)";
+        playMechanicalClick(true); // Play alert confirmation sound
+      } else {
+        audioToggleBtn.textContent = "AUDIO: OFF";
+        audioToggleBtn.style.color = "#888";
+      }
+    });
+  }
+
   // --- Theme Switcher Core Logic ---
   const activeColor = localStorage.getItem("portfolio-accent") || "#e74c3c";
   document.documentElement.style.setProperty("--accent-color", activeColor);
@@ -24,6 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
       localStorage.setItem("portfolio-accent", selectedColor);
       themeDots.forEach((d) => d.classList.remove("active"));
       dot.classList.add("active");
+      playMechanicalClick(false);
     });
   });
 
@@ -69,6 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const closeModal = () => {
       modalOverlay.classList.add("hidden");
       document.body.style.overflow = "";
+      playMechanicalClick(false);
     };
 
     document.querySelectorAll(".modal-trigger").forEach((btn) => {
@@ -85,6 +166,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         modalOverlay.classList.remove("hidden");
         document.body.style.overflow = "hidden";
+        playMechanicalClick(true);
       });
     });
 
@@ -94,7 +176,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // --- 4. TERMINAL CHATBOT ---
+  // --- 4. TERMINAL CHATBOT + TYPEWRITER AUDIO MATRIX ---
   const terminalWindow = document.getElementById("terminal-window");
   const chatbotToggle = document.getElementById("chatbot-toggle");
   const closeTerminal = document.getElementById("close-terminal");
@@ -112,16 +194,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
     chatbotToggle.addEventListener("click", () => {
       terminalWindow.classList.toggle("hidden");
+      playMechanicalClick(true);
       if (!terminalWindow.classList.contains("hidden")) {
         setTimeout(() => terminalInput.focus(), 100);
       }
     });
 
     if (closeTerminal) {
-      closeTerminal.addEventListener("click", () =>
-        terminalWindow.classList.add("hidden"),
-      );
+      closeTerminal.addEventListener("click", () => {
+        terminalWindow.classList.add("hidden");
+        playMechanicalClick(false);
+      });
     }
+
+    // Play sound effects when the user types directly into the terminal
+    terminalInput.addEventListener("input", () => {
+      playMechanicalClick(false);
+    });
 
     let isBotTyping = false;
 
@@ -131,6 +220,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const query = terminalInput.value.trim().toLowerCase();
       if (!query) return;
+
+      playMechanicalClick(true); // Return execution clack
 
       terminalOutput.innerHTML += `<p class="user-msg">> ${terminalInput.value}</p>`;
       terminalInput.value = "";
@@ -158,13 +249,20 @@ document.addEventListener("DOMContentLoaded", () => {
       isBotTyping = true;
 
       const parsingId = "parse-" + Date.now();
-      terminalOutput.innerHTML += `<p id="${parsingId}" class="system-msg">> Scanning Muhammad_Zulqurnain_Cv.pdf...</p>`;
+      terminalOutput.innerHTML += `<p id="${parsingId}" class="system-msg">> Scanning dataset...</p>`;
       terminalOutput.scrollTop = terminalOutput.scrollHeight;
 
+      // Audio generation cycle loop simulating server activity clicks
+      let audioInterval = setInterval(() => {
+        if (isBotTyping && audioEnabled) playMechanicalClick(false);
+      }, 120);
+
       setTimeout(() => {
+        clearInterval(audioInterval);
         const parseElement = document.getElementById(parsingId);
         if (parseElement)
           parseElement.innerText = "> Data extracted successfully.";
+        if (audioEnabled) playMechanicalClick(true);
 
         setTimeout(() => {
           terminalOutput.innerHTML += `<p>${response}</p>`;
@@ -175,7 +273,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // --- 5. SECURE FORM HIJACK (Email API + Honeypot + Universal Email Check) ---
+  // --- 5. SECURE FORM HIJACK ---
   const gForm = document.getElementById("gform");
   const emailInput = document.getElementById("email-input");
   const formMsg = document.getElementById("form-msg");
@@ -211,6 +309,7 @@ document.addEventListener("DOMContentLoaded", () => {
       submitBtn.textContent = "Transmitting...";
       formMsg.textContent = "";
       emailInput.style.borderColor = "#333";
+      playMechanicalClick(true);
 
       const formData = new FormData(gForm);
 
@@ -226,6 +325,7 @@ document.addEventListener("DOMContentLoaded", () => {
             formMsg.textContent =
               "TRANSMISSION SUCCESSFUL. I WILL BE IN TOUCH.";
             formMsg.className = "form-msg msg-success";
+            playMechanicalClick(true);
           } else {
             submitBtn.textContent = "Transmit Message";
             formMsg.textContent = "SYSTEM ERROR. TRY AGAIN.";
