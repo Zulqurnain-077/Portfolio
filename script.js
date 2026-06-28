@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let audioEnabled = false;
   const audioToggleBtn = document.getElementById("audio-toggle");
 
-  // Synthesize a mechanical keyboard "clack" using low/high frequency noise bursts
   const playMechanicalClick = (isEnterKey = false) => {
     if (!audioEnabled) return;
     try {
@@ -16,8 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!AudioContext) return;
       const ctx = new AudioContext();
 
-      // Generate raw noise buffer for key impact texture
-      const bufferSize = ctx.sampleRate * 0.04; // Very short burst (40ms)
+      const bufferSize = ctx.sampleRate * 0.04;
       const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
       const data = buffer.getChannelData(0);
       for (let i = 0; i < bufferSize; i++) {
@@ -29,7 +27,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const noiseFilter = ctx.createBiquadFilter();
       noiseFilter.type = "bandpass";
-      // Enter key has a deeper resonance cavity than regular letters
       noiseFilter.frequency.setValueAtTime(
         isEnterKey ? 600 : 1200,
         ctx.currentTime,
@@ -43,7 +40,6 @@ document.addEventListener("DOMContentLoaded", () => {
         ctx.currentTime + 0.03,
       );
 
-      // Synthesize the metallic switch pin vibration
       const osc = ctx.createOscillator();
       const oscGain = ctx.createGain();
       osc.type = "sine";
@@ -52,7 +48,6 @@ document.addEventListener("DOMContentLoaded", () => {
       oscGain.gain.setValueAtTime(isEnterKey ? 0.1 : 0.04, ctx.currentTime);
       oscGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.02);
 
-      // Connect nodes to audio destination
       noise.connect(noiseFilter);
       noiseFilter.connect(noiseGain);
       noiseGain.connect(ctx.destination);
@@ -65,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
       noise.stop(ctx.currentTime + 0.04);
       osc.stop(ctx.currentTime + 0.04);
     } catch (e) {
-      console.log("Audio synthesis blocked by browser security policy.");
+      console.log("Audio synthesis blocked.");
     }
   };
 
@@ -75,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (audioEnabled) {
         audioToggleBtn.textContent = "AUDIO: ON";
         audioToggleBtn.style.color = "var(--accent-color)";
-        playMechanicalClick(true); // Play alert confirmation sound
+        playMechanicalClick(true);
       } else {
         audioToggleBtn.textContent = "AUDIO: OFF";
         audioToggleBtn.style.color = "#888";
@@ -105,6 +100,196 @@ document.addEventListener("DOMContentLoaded", () => {
       dot.classList.add("active");
       playMechanicalClick(false);
     });
+  });
+
+  // --- COMMAND PALETTE CORE LOGIC (Ctrl + K) ---
+  const palette = document.getElementById("command-palette");
+  const paletteSearch = document.getElementById("palette-search");
+  const paletteResults = document.getElementById("palette-results");
+  let selectedItemIndex = 0;
+  let filteredCommands = [];
+
+  // Master command registry
+  const commandsList = [
+    {
+      text: "Go to: Top / Intro",
+      category: "navigation",
+      action: () => window.scrollTo({ top: 0, behavior: "smooth" }),
+      shortcut: "home",
+    },
+    {
+      text: "Go to: Core Strengths",
+      category: "navigation",
+      action: () =>
+        document
+          .getElementById("skills")
+          .scrollIntoView({ behavior: "smooth" }),
+      shortcut: "goto strengths",
+    },
+    {
+      text: "Go to: Projects Portfolio",
+      category: "navigation",
+      action: () =>
+        document.getElementById("work").scrollIntoView({ behavior: "smooth" }),
+      shortcut: "goto projects",
+    },
+    {
+      text: "Go to: Education",
+      category: "navigation",
+      action: () =>
+        document
+          .getElementById("education")
+          .scrollIntoView({ behavior: "smooth" }),
+      shortcut: "goto education",
+    },
+    {
+      text: "Go to: Initiate Contact Form",
+      category: "navigation",
+      action: () =>
+        document
+          .getElementById("contact")
+          .scrollIntoView({ behavior: "smooth" }),
+      shortcut: "goto contact",
+    },
+    {
+      text: "Open System Chatbot AI",
+      category: "utility",
+      action: () => document.getElementById("chatbot-toggle").click(),
+      shortcut: "chat",
+    },
+    {
+      text: "Theme: Matrix Red",
+      category: "theme",
+      action: () => document.querySelector('[data-color="#e74c3c"]').click(),
+      shortcut: "theme red",
+    },
+    {
+      text: "Theme: Terminal Green",
+      category: "theme",
+      action: () => document.querySelector('[data-color="#00ff00"]').click(),
+      shortcut: "theme green",
+    },
+    {
+      text: "Theme: Cyberpunk Cyan",
+      category: "theme",
+      action: () => document.querySelector('[data-color="#00f0ff"]').click(),
+      shortcut: "theme cyan",
+    },
+    {
+      text: "Theme: Classic White",
+      category: "theme",
+      action: () => document.querySelector('[data-color="#ffffff"]').click(),
+      shortcut: "theme white",
+    },
+  ];
+
+  const openPalette = () => {
+    palette.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+    paletteSearch.value = "";
+    selectedItemIndex = 0;
+    renderResults(commandsList);
+    setTimeout(() => paletteSearch.focus(), 50);
+    playMechanicalClick(true);
+  };
+
+  const closePalette = () => {
+    palette.classList.add("hidden");
+    if (!document.getElementById("project-modal").classList.contains("hidden"))
+      return;
+    document.body.style.overflow = "";
+  };
+
+  const renderResults = (items) => {
+    filteredCommands = items;
+    if (items.length === 0) {
+      paletteResults.innerHTML = `<div class="palette-item" style="cursor:default;color:#555;">No commands match query...</div>`;
+      return;
+    }
+
+    paletteResults.innerHTML = items
+      .map(
+        (item, idx) => `
+            <div class="palette-item ${idx === selectedItemIndex ? "selected" : ""}" data-idx="${idx}">
+                <span>${item.text}</span>
+                <span class="palette-shortcut">${item.shortcut}</span>
+            </div>
+        `,
+      )
+      .join("");
+
+    // Wire immediate item clicking
+    document
+      .querySelectorAll(".palette-results .palette-item")
+      .forEach((el) => {
+        el.addEventListener("click", () => {
+          selectedItemIndex = parseInt(el.dataset.idx);
+          executeSelectedAction();
+        });
+      });
+  };
+
+  const executeSelectedAction = () => {
+    if (filteredCommands[selectedItemIndex]) {
+      filteredCommands[selectedItemIndex].action();
+      closePalette();
+      playMechanicalClick(true);
+    }
+  };
+
+  // Global Key Listening Interceptor
+  window.addEventListener("keydown", (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+      e.preventDefault();
+      if (palette.classList.contains("hidden")) openPalette();
+      else closePalette();
+    }
+    if (e.key === "Escape" && !palette.classList.contains("hidden")) {
+      closePalette();
+    }
+  });
+
+  paletteSearch.addEventListener("keydown", (e) => {
+    if (filteredCommands.length === 0) return;
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      selectedItemIndex = (selectedItemIndex + 1) % filteredCommands.length;
+      renderResults(filteredCommands);
+      playMechanicalClick(false);
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      selectedItemIndex =
+        (selectedItemIndex - 1 + filteredCommands.length) %
+        filteredCommands.length;
+      renderResults(filteredCommands);
+      playMechanicalClick(false);
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      executeSelectedAction();
+    }
+  });
+
+  paletteSearch.addEventListener("input", () => {
+    playMechanicalClick(false);
+    const query = paletteSearch.value.toLowerCase().trim();
+    selectedItemIndex = 0;
+
+    if (!query) {
+      renderResults(commandsList);
+      return;
+    }
+
+    const filtered = commandsList.filter(
+      (item) =>
+        item.text.toLowerCase().includes(query) ||
+        item.shortcut.toLowerCase().includes(query),
+    );
+    renderResults(filtered);
+  });
+
+  palette.addEventListener("click", (e) => {
+    if (e.target === palette) closePalette();
   });
 
   // --- 1. Scroll Reveal ---
@@ -176,7 +361,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // --- 4. TERMINAL CHATBOT + TYPEWRITER AUDIO MATRIX ---
+  // --- 4. TERMINAL CHATBOT ---
   const terminalWindow = document.getElementById("terminal-window");
   const chatbotToggle = document.getElementById("chatbot-toggle");
   const closeTerminal = document.getElementById("close-terminal");
@@ -207,7 +392,6 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
 
-    // Play sound effects when the user types directly into the terminal
     terminalInput.addEventListener("input", () => {
       playMechanicalClick(false);
     });
@@ -221,7 +405,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const query = terminalInput.value.trim().toLowerCase();
       if (!query) return;
 
-      playMechanicalClick(true); // Return execution clack
+      playMechanicalClick(true);
 
       terminalOutput.innerHTML += `<p class="user-msg">> ${terminalInput.value}</p>`;
       terminalInput.value = "";
@@ -252,7 +436,6 @@ document.addEventListener("DOMContentLoaded", () => {
       terminalOutput.innerHTML += `<p id="${parsingId}" class="system-msg">> Scanning dataset...</p>`;
       terminalOutput.scrollTop = terminalOutput.scrollHeight;
 
-      // Audio generation cycle loop simulating server activity clicks
       let audioInterval = setInterval(() => {
         if (isBotTyping && audioEnabled) playMechanicalClick(false);
       }, 120);

@@ -682,3 +682,106 @@ footer {
     font-size: 1.2rem;
   }
 }
+/* --- COMMAND PALETTE STYLING --- */
+.palette-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 3000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 15vh;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+  backdrop-filter: blur(4px);
+}
+.palette-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.palette-box {
+  background: #0a0a0a;
+  border: 1px solid #333;
+  width: 90%;
+  max-width: 600px;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
+  font-family: "JetBrains Mono", monospace;
+}
+.palette-search-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid #222;
+  background: #050505;
+}
+.palette-search-wrapper span {
+  color: var(--accent-color);
+  font-size: 1.2rem;
+  margin-right: 15px;
+  font-weight: bold;
+}
+#palette-search {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 1rem;
+  outline: none;
+}
+.palette-search-wrapper kbd {
+  background: #222;
+  border: 1px solid #444;
+  color: #888;
+  padding: 2px 6px;
+  font-size: 0.75rem;
+  border-radius: 4px;
+}
+.palette-results {
+  max-height: 280px;
+  overflow-y: auto;
+  padding: 10px 0;
+}
+.palette-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  color: #aaa;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition:
+    background 0.1s,
+    color 0.1s;
+}
+.palette-item.selected {
+  background: #111;
+  color: var(--accent-color);
+}
+.palette-shortcut {
+  color: #555;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+.palette-item.selected .palette-shortcut {
+  color: #888;
+}
+.palette-footer {
+  background: #050505;
+  padding: 10px 20px;
+  border-top: 1px solid #222;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}

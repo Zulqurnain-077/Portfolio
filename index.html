@@ -334,7 +334,23 @@
         </svg>
       </button>
     </div>
-
+<!-- Command Palette Overlay -->
+    <div id="command-palette" class="palette-overlay hidden">
+        <div class="palette-box">
+            <div class="palette-search-wrapper">
+                <span>></span>
+                <input type="text" id="palette-search" placeholder="Type a command or shortcut... (e.g., 'goto strengths', 'theme green')" autocomplete="off">
+                <kbd>ESC</kbd>
+            </div>
+            <div class="palette-results" id="palette-results">
+                <!-- Dynamic choices injected here -->
+            </div>
+            <div class="palette-footer">
+                <span>↑↓ to navigate</span>
+                <span>Enter to execute</span>
+            </div>
+        </div>
+    </div>
     <script src="data.js"></script>
     <script src="script.js"></script>
   </body>
