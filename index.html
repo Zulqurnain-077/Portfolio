@@ -607,15 +607,15 @@
           >
             <input type="hidden" name="access_key" value="35625c93-462d-4ad6-8e54-2910e8bfc8eb" />
             <input type="hidden" name="subject" value="New enquiry from your portfolio site" />
-            <input type="hidden" name="from_name" value="Portfolio — zulqurnain" />
+            <input type="hidden" name="from_name" value="Portfolio Contact Form" />
 
-            <!-- Honeypots: custom + web3forms native. Both invisible to humans. -->
-            <div class="sr-only" aria-hidden="true">
-              <label for="bot-trap">Leave this empty</label>
-              <input type="text" name="bot-trap" id="bot-trap" tabindex="-1" autocomplete="off" />
-              <input type="checkbox" name="botcheck" tabindex="-1" />
-            </div>
-
+<!-- Web3forms' native honeypot. A bot ticks it and Web3forms drops
+     the submission server-side. Deliberately NOT .sr-only: that
+     class hides visually only, so the field stays in the a11y tree
+     where autofill can reach it. A checkbox can't be autofilled,
+     and nothing client-side blocks the send on it — a trap that
+     misfires must never eat a real message. -->
+<input type="checkbox" name="botcheck" class="hp" tabindex="-1" aria-hidden="true" />
             <h3 class="mono-label">Send a message</h3>
 
             <div class="field-row">

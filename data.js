@@ -14,8 +14,16 @@
    in all three. No dead links, no list to keep in sync.
    -------------------------------------------------------------------------- */
 const ZQ_LINKS = [
-  { label: "GitHub", handle: "github.com/…", url: "" },
-  { label: "LinkedIn", handle: "linkedin.com/in/…", url: "" },
+  {
+    label: "GitHub",
+    handle: "github.com/Zulqurnain-077",
+    url: "https://github.com/Zulqurnain-077",
+  },
+  {
+    label: "LinkedIn",
+    handle: "linkedin.com/in/Zulqurnain Yousaf",
+    url: "https://www.linkedin.com/in/zulqurnain-yousaf/",
+  },
   {
     label: "Email",
     handle: "zulqurnainyousaf2001@gmail.com",

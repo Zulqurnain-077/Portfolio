@@ -1492,7 +1492,6 @@
     const btn = qs("#submit-btn");
     const btnLabel = btn ? qs(".btn-label", btn) : null;
     const counter = qs("#char-count");
-    const trap = qs("#bot-trap");
     const MAX = Number(msgEl?.getAttribute("maxlength")) || 1200;
     let sending = false;
 
@@ -1584,15 +1583,10 @@
       e.preventDefault();
       if (sending) return;
 
-      // Honeypots. A filled trap gets a fake success — never a hint.
-      const nativeTrap = form.querySelector('[name="botcheck"]');
-      if ((trap && trap.value !== "") || (nativeTrap && nativeTrap.checked)) {
-        form.reset();
-        syncCount();
-        say("Message sent. I'll be in touch.", "success");
-        return;
-      }
-
+      /* No client-side honeypot check. `botcheck` is filtered by Web3forms
+         server-side, which costs a bot nothing to trip and costs a real
+         visitor nothing when it misfires. Deciding here to discard a message
+         — and then claiming it sent — is how real mail gets lost. */
       const ok = [nameEl, mailEl, msgEl]
         .map((el) => validate(el))
         .every(Boolean);
@@ -1631,8 +1625,14 @@
           setTimeout(() => setLabel("Send message"), 4000);
         } else {
           setLabel("Send message");
+          // Surface the real reason: quota, unverified key, bad payload.
+          console.error("[form] web3forms rejected:", res.status, json);
           say(
-            json.message || "The server rejected that. Please try again.",
+            (json.message ||
+              "The mail service rejected that (HTTP " + res.status + ").") +
+              " Email me directly at " +
+              ((D.profile || {}).email || "") +
+              ".",
             "error",
           );
         }
